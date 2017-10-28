@@ -41,7 +41,7 @@ public class NewJFrame extends javax.swing.JFrame {
         verdeMeanText = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
         azulMeanText = new javax.swing.JTextField();
-        panelDinamico = new Panel_Imagen_Dinamico(this);
+        panelDinamico = new Panel_Imagen_Dinamico();
         panelImagen1 = new PanelImagen();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
