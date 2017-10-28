@@ -17,7 +17,7 @@ public class EstadisticasImagen {
     public int minimo[] = new int[3];
     public int promedio[] = new int[3];
     
-    EstadisticasImagen calculaEstadisticas(BufferedImage imagen, Point esqSupIzda, Point esqInfDcha){
+    public static EstadisticasImagen calculaEstadisticas(BufferedImage imagen, Point esqSupIzda, Point esqInfDcha){
         Planar<GrayU8> imagenColor = ConvertBufferedImage.convertFromPlanar(imagen,null,true,GrayU8.class);
         EstadisticasImagen res = new EstadisticasImagen();
         
