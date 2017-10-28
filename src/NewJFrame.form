@@ -322,8 +322,13 @@
       </SubComponents>
     </Container>
     <Container class="Panel_Imagen_Dinamico" name="panelDinamico">
+      <Properties>
+        <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+          <Dimension value="[2000, 2000]"/>
+        </Property>
+      </Properties>
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new Panel_Imagen_Dinamico(this)"/>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new Panel_Imagen_Dinamico()"/>
       </AuxValues>
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>

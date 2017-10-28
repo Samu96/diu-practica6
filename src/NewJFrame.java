@@ -1,10 +1,8 @@
 
-import java.awt.Dimension;
-import java.awt.Point;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
-import javax.swing.JScrollBar;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -12,8 +10,7 @@ public class NewJFrame extends javax.swing.JFrame {
 
     public NewJFrame() {
         initComponents();
-        panelDinamico.setEnabled(false);
-        panelImagen1.setVisible(false);
+        
     }
 
     @SuppressWarnings("unchecked")
@@ -199,6 +196,8 @@ public class NewJFrame extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        panelDinamico.setPreferredSize(new java.awt.Dimension(2000, 2000));
+
         panelImagen1.setEnabled(false);
         panelImagen1.setPreferredSize(new java.awt.Dimension(2000, 2000));
 
@@ -259,7 +258,9 @@ public class NewJFrame extends javax.swing.JFrame {
         repaint();
         if (res == JFileChooser.APPROVE_OPTION) {
             try{
-                panelImagen1.setI(ImageIO.read(fc.getSelectedFile()));
+                BufferedImage I = ImageIO.read(fc.getSelectedFile());
+                panelImagen1.setI(I);
+                panelDinamico.setI(I);
                 setStats();
             }catch(IOException e){
             }
@@ -286,6 +287,7 @@ public class NewJFrame extends javax.swing.JFrame {
         azulMaxText.setText(String.valueOf(stats.maximo[2]));
         azulMinText.setText(String.valueOf(stats.minimo[2]));
         azulMeanText.setText(String.valueOf(stats.promedio[2]));
+        
     }
     
     public static void main(String args[]) {
