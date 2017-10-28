@@ -3,6 +3,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.event.AdjustmentEvent;
+import java.awt.image.BufferedImage;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JViewport;
@@ -10,12 +11,16 @@ import javax.swing.JViewport;
 public class Panel_Imagen_Dinamico extends JScrollPane{
     private JScrollBar HBar, VBar;
     private EstadisticasImagen stats;
+    private BufferedImage I;
+
+    public void setI(BufferedImage I) {
+        this.I = I;
+    }
     
     
     public Panel_Imagen_Dinamico() {
         this.HBar = getHorizontalScrollBar();
         this.VBar = getVerticalScrollBar();
-        
         HBar.addAdjustmentListener(new java.awt.event.AdjustmentListener() {
             @Override
             public void adjustmentValueChanged(AdjustmentEvent e) {
@@ -31,11 +36,11 @@ public class Panel_Imagen_Dinamico extends JScrollPane{
     }
     
     
-    private void miHScrollAdjust(AdjustmentEvent e){
-        frame.setStats();
+    public void miHScrollAdjust(AdjustmentEvent e){
+        //setStats();
     }
     private void miVScrollAdjust(AdjustmentEvent e){
-        //frame.setStats();
+        //setStats();
     }
     
     @Override
@@ -59,8 +64,8 @@ public class Panel_Imagen_Dinamico extends JScrollPane{
     
     protected void setStatistics(){
         int[] pos = this.parametros();
-        /*this.stats = EstadisticasImagen.calculaEstadisticas(frame.getPanelImagen1().getI(),
-                new Point(pos[0],pos[1]),new Point(pos[0]+pos[2],pos[1]+pos[3]));*/
+        this.stats = EstadisticasImagen.calculaEstadisticas(I,
+                new Point(pos[0],pos[1]),new Point(pos[0]+pos[2],pos[1]+pos[3]));
     }
 
     public EstadisticasImagen getStats() {
