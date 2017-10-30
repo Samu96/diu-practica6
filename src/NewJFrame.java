@@ -1,8 +1,16 @@
 
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Point;
+import java.awt.event.AdjustmentEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
+import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+import javax.swing.JViewport;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -10,7 +18,6 @@ public class NewJFrame extends javax.swing.JFrame {
 
     public NewJFrame() {
         initComponents();
-        
     }
 
     @SuppressWarnings("unchecked")
@@ -196,9 +203,8 @@ public class NewJFrame extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        panelDinamico.setPreferredSize(new java.awt.Dimension(2000, 2000));
+        panelDinamico.setPreferredSize(new java.awt.Dimension(0, 0));
 
-        panelImagen1.setEnabled(false);
         panelImagen1.setPreferredSize(new java.awt.Dimension(2000, 2000));
 
         javax.swing.GroupLayout panelImagen1Layout = new javax.swing.GroupLayout(panelImagen1);
@@ -244,52 +250,50 @@ public class NewJFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void openButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openButtonActionPerformed
-        
-        JFileChooser fc= new JFileChooser(".");
-        FileFilter f = new FileNameExtensionFilter("JPG: .jpg,.jpeg,.jpe", "jpg","jpeg","jpe","JPG","JPEG","JPE");
+
+        JFileChooser fc = new JFileChooser(".");
+        FileFilter f = new FileNameExtensionFilter("JPG: .jpg,.jpeg,.jpe", "jpg", "jpeg", "jpe", "JPG", "JPEG", "JPE");
         fc.addChoosableFileFilter(f);
-        f = new FileNameExtensionFilter("PNG: .png", "png","PNG");
+        f = new FileNameExtensionFilter("PNG: .png", "png", "PNG");
         fc.addChoosableFileFilter(f);
         f = new FileNameExtensionFilter("BMP: .bmp", "bmp", "BMP");
         fc.addChoosableFileFilter(f);
-        fc.setAcceptAllFileFilterUsed(false); 
-        
-        int res =fc.showOpenDialog(null);
+        fc.setAcceptAllFileFilterUsed(false);
+
+        int res = fc.showOpenDialog(null);
         repaint();
         if (res == JFileChooser.APPROVE_OPTION) {
-            try{
+            try {
                 BufferedImage I = ImageIO.read(fc.getSelectedFile());
                 panelImagen1.setI(I);
                 panelDinamico.setI(I);
                 setStats();
-            }catch(IOException e){
+            } catch (IOException e) {
             }
             panelImagen1.paintComponent(panelImagen1.getGraphics());
         }
-        
+
     }//GEN-LAST:event_openButtonActionPerformed
 
-    
-    
-    protected void setStats(){
-        
+    protected void setStats() {
+
         panelDinamico.setStatistics();
         EstadisticasImagen stats = panelDinamico.getStats();
-        
+
         rojoMaxText.setText(String.valueOf(stats.maximo[0]));
         rojoMinText.setText(String.valueOf(stats.minimo[0]));
         rojoMeanText.setText(String.valueOf(stats.promedio[0]));
-        
+
         verdeMaxText.setText(String.valueOf(stats.maximo[1]));
         verdeMinText.setText(String.valueOf(stats.minimo[1]));
         verdeMeanText.setText(String.valueOf(stats.promedio[1]));
-        
+
         azulMaxText.setText(String.valueOf(stats.maximo[2]));
         azulMinText.setText(String.valueOf(stats.minimo[2]));
         azulMeanText.setText(String.valueOf(stats.promedio[2]));
-        
+
     }
-    
+
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -327,4 +331,79 @@ public class NewJFrame extends javax.swing.JFrame {
     private javax.swing.JTextField verdeMeanText;
     private javax.swing.JTextField verdeMinText;
     // End of variables declaration//GEN-END:variables
+
+    public class Panel_Imagen_Dinamico extends JScrollPane {
+
+        private JScrollBar HBar, VBar;
+        private EstadisticasImagen stats;
+        private BufferedImage I;
+
+        public void setI(BufferedImage I) {
+            this.I = I;
+        }
+
+        public Panel_Imagen_Dinamico() {
+            this.HBar = getHorizontalScrollBar();
+            this.VBar = getVerticalScrollBar();
+            HBar.addAdjustmentListener(new java.awt.event.AdjustmentListener() {
+                @Override
+                public void adjustmentValueChanged(AdjustmentEvent e) {
+                    miHScrollAdjust(e);
+                }
+            });
+            VBar.addAdjustmentListener(new java.awt.event.AdjustmentListener() {
+                @Override
+                public void adjustmentValueChanged(AdjustmentEvent e) {
+                    miVScrollAdjust(e);
+                }
+            });
+        }
+
+        public void miHScrollAdjust(AdjustmentEvent e) {
+            try {
+                setStats();
+            } catch (Exception ex) {
+            }
+        }
+
+        private void miVScrollAdjust(AdjustmentEvent e) {
+            try {
+                setStats();
+            } catch (Exception ex) {
+            }
+        }
+
+        @Override
+        public void paintComponent(Graphics g) {
+            super.paintComponent(g);
+        }
+
+        public int[] parametros() {
+            JViewport vista = getViewport();
+            int[] parametros = new int[4];
+
+            Point p = vista.getViewPosition();
+            parametros[0] = p.x;
+            parametros[1] = p.y;
+
+            Dimension d = vista.getExtentSize();
+            parametros[2] = d.height;
+            parametros[3] = d.width;
+            return parametros;
+        }
+
+        protected void setStatistics() {
+
+            int[] pos = this.parametros();
+            this.stats = EstadisticasImagen.calculaEstadisticas(I,
+                    new Point(pos[0], pos[1]), new Point(pos[0] + pos[2], pos[1] + pos[3]));
+
+        }
+
+        public EstadisticasImagen getStats() {
+            return stats;
+        }
+
+    }
+
 }
